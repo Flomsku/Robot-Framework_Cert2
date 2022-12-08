@@ -12,6 +12,7 @@ Library             RPA.Tables
 Library             RPA.PDF
 Library             RPA.FileSystem
 Library             RPA.Archive
+Library             RPA.Dialogs
 
 
 *** Tasks ***
@@ -31,6 +32,8 @@ Order robots from RobotSpareBin Industries Inc
         Embed the robot screenshot to the receipt PDF file    ${pdf}    ${screenshot}
         Order another robot
     END
+
+Receipts handling
     Create ZIP file of the receipts
     Cleanup temporary PDF directory
 
@@ -40,7 +43,13 @@ Open RobotSpareBin website
     Open Available Browser    https://robotsparebinindustries.com/#/robot-order
 
 Get orders
-    Download    https://robotsparebinindustries.com/orders.csv
+    Add heading    Please enter the URL of csv file
+    Add text input    URL    label=URL:
+    ...    placeholder=Enter URL here
+    ...    rows=1
+    ${results}=    Run dialog
+    Log    ${results.URL}
+    Download    ${results.URL}    #https://robotsparebinindustries.com/orders.csv
     ${data}=    Read table from CSV
     ...    orders.csv
     ...    header=true
@@ -63,7 +72,7 @@ Preview the robot
     Click Button    preview
 
 Submit
-    Wait Until Keyword Succeeds    1min    2s    Server error
+    Wait Until Keyword Succeeds    1min    1s    Server error
 
 Server error
     Click Button    order
