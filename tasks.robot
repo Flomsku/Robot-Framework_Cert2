@@ -11,7 +11,6 @@ Library             RPA.Excel.Files
 Library             RPA.Tables
 Library             RPA.Windows
 Library             RPA.PDF
-Library             Screenshot
 
 
 *** Tasks ***
@@ -75,28 +74,31 @@ Order another robot
 
 Store receipt as PDF
     [Arguments]    ${row}
-    Log    ${row}
-    ${path}=    Convert To String    ${row}
-    Log    ${path}
     Wait Until Element Is Visible    receipt
     ${receipt_html}=    Get Element Attribute    receipt    outerHTML
-    Html To Pdf    ${receipt_html}    ${OUTPUT_DIR}${/}receiptwithscreenshot.pdf
+    Html To Pdf    ${receipt_html}    ${OUTPUT_DIR}${/}${row}.pdf
+    ${pdf}=    Convert to string    ${OUTPUT_DIR}${/}${row}.pdf
+    Log    ${pdf}
+    RETURN    ${pdf}
 
 Take screenshot of the robot
     [Arguments]    ${row}
-    ${screenshot}=    RPA.Browser.Selenium.Screenshot
+    Wait Until Element Is Visible    css:#robot-preview-image
+    RPA.Browser.Selenium.Screenshot
     ...    css:#robot-preview-image
-    ...    ${OUTPUT_DIR}${/}receiptwithscreenshot.png
+    ...    ${OUTPUT_DIR}${/}${row}.png
+    ${screenshot}=    Convert To String    ${OUTPUT_DIR}${/}${row}.png
+    Log    ${screenshot}
     RETURN    ${screenshot}
 
 Embed the robot screenshot to the receipt PDF file
     [Arguments]    ${pdf}    ${screenshot}
-    Open Pdf    ${OUTPUT_DIR}${/}receiptwithscreenshot.pdf
-    ${files}=    Create List
-    ...    ${OUTPUT_DIR}${/}receiptwithscreenshot.pdf
-    ...    ${OUTPUT_DIR}${/}receiptwithscreenshot.png
-    Add Files To Pdf    ${files}    summary.pdf
-    Close Pdf
+    Log    ${pdf}
+    Open Pdf    ${pdf}
+    Log    ${screenshot}
+    Add Watermark Image To Pdf    ${screenshot}    ${pdf}
+    Close Pdf    ${pdf}
+
 #Create ZIP file of the receipts
 
 #Fill the form for one order
