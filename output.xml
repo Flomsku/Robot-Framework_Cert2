@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 5.0.1 (Python 3.9.13 on win32)" generated="20221118 20:18:06.227" rpa="true" schemaversion="3">
+<suite id="s1" name="Tasks" source="c:\Users\oskum\Documents\RobotFramework\MyRobot2\tasks.robot">
+<test id="s1-t1" name="Order robots from RobotSpareBin Industries Inc" line="15">
+<kw name="Open RobotSpareBin website">
+<kw name="Open Available Browser" library="RPA.Browser.Selenium">
+<arg>https://robotsparebinindustries.com/#/robot-order</arg>
+<doc>Attempts to open a browser on the user's device from a set of
+supported browsers. Automatically downloads a corresponding webdriver
+if none is already installed.</doc>
+<msg timestamp="20221118 20:18:07.486" level="INFO">Creating an instance of the Chrome WebDriver.</msg>
+<msg timestamp="20221118 20:18:07.497" level="INFO">====== WebDriver manager ======</msg>
+<msg timestamp="20221118 20:18:08.284" level="INFO">Creating an instance of the Chrome WebDriver.</msg>
+<msg timestamp="20221118 20:18:09.235" level="INFO">Created Chrome browser with arguments: --disable-dev-shm-usage --disable-web-security --allow-running-insecure-content --no-sandbox</msg>
+<msg timestamp="20221118 20:18:09.236" level="INFO" html="true">&lt;p&gt;Attempted combinations:&lt;/p&gt;&lt;div class="doc"&gt;&lt;table&gt;&lt;tr&gt;&lt;th&gt;Browser&lt;/th&gt;&lt;th&gt;Download&lt;/th&gt;&lt;th&gt;Error&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Chrome&lt;/td&gt;&lt;td&gt;False&lt;/td&gt;&lt;td&gt;Message: 'chromedriver' executable needs to be in PATH. Please see https://chromedriver.chromium.org/home
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Chrome&lt;/td&gt;&lt;td&gt;True&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</msg>
+<msg timestamp="20221118 20:18:09.236" level="INFO">Opening url 'https://robotsparebinindustries.com/#/robot-order'</msg>
+<status status="PASS" starttime="20221118 20:18:07.485" endtime="20221118 20:18:09.768"/>
+</kw>
+<status status="PASS" starttime="20221118 20:18:07.485" endtime="20221118 20:18:09.768"/>
+</kw>
+<kw name="Download order file and read it">
+<kw name="Download" library="RPA.HTTP">
+<arg>https://robotsparebinindustries.com/orders.csv</arg>
+<doc>An alias for the ``HTTP Get`` keyword.</doc>
+<msg timestamp="20221118 20:18:09.770" level="INFO">Creating a new HTTP session</msg>
+<msg timestamp="20221118 20:18:09.770" level="INFO">Creating Session using : alias=rpasession_alias.httpsrobotsparebinindustries.com, url=https://robotsparebinindustries.com, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=True,                     debug=0 </msg>
+<status status="PASS" starttime="20221118 20:18:09.769" endtime="20221118 20:18:10.130"/>
+</kw>
+<kw name="Open Workbook" library="RPA.Excel.Files">
+<arg>orders.csv</arg>
+<doc>Open an existing Excel workbook.</doc>
+<msg timestamp="20221118 20:18:10.131" level="INFO">Failed to open as Excel Binary Format (.xls): Unsupported format, or corrupt file: Expected BOF record; found b'Order nu'</msg>
+<msg timestamp="20221118 20:18:10.131" level="FAIL">ValueError: Failed to open Excel file (C:\Users\oskum\Documents\RobotFramework\MyRobot2\orders.csv), verify that the path and extension are correct</msg>
+<status status="FAIL" starttime="20221118 20:18:10.130" endtime="20221118 20:18:10.133"/>
+</kw>
+<kw name="Read Worksheet As Table" library="RPA.Excel.Files">
+<var>${orders}</var>
+<arg>header=true</arg>
+<doc>Read the contents of a worksheet into a Table container. Allows
+sorting/filtering/manipulating using the ``RPA.Tables`` library.</doc>
+<status status="NOT RUN" starttime="20221118 20:18:10.133" endtime="20221118 20:18:10.133"/>
+</kw>
+<kw name="Close Workbook" library="RPA.Excel.Files">
+<doc>Close the active workbook.</doc>
+<status status="NOT RUN" starttime="20221118 20:18:10.133" endtime="20221118 20:18:10.133"/>
+</kw>
+<for flavor="IN">
+<var>${row}</var>
+<value>@{orders}</value>
+<iter>
+<var name="${row}"/>
+<kw name="Log" library="BuiltIn">
+<arg>${row}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20221118 20:18:10.134" endtime="20221118 20:18:10.134"/>
+</kw>
+<status status="NOT RUN" starttime="20221118 20:18:10.134" endtime="20221118 20:18:10.134"/>
+</iter>
+<status status="NOT RUN" starttime="20221118 20:18:10.134" endtime="20221118 20:18:10.134"/>
+</for>
+<status status="FAIL" starttime="20221118 20:18:09.769" endtime="20221118 20:18:10.134"/>
+</kw>
+<status status="FAIL" starttime="20221118 20:18:07.484" endtime="20221118 20:18:10.135">ValueError: Failed to open Excel file (C:\Users\oskum\Documents\RobotFramework\MyRobot2\orders.csv), verify that the path and extension are correct</status>
+</test>
+<doc>Order robots from the RobotSpareBin Industries Inc website
+Saves the order from HTML receipt as a PDF file
+Saves screenshot of the ordered robots
+Embeds the screenshot of the robot to the PDF receipt
+Creates ZIP archive of the receipts and the images</doc>
+<status status="FAIL" starttime="20221118 20:18:06.238" endtime="20221118 20:18:10.137"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="1" skip="0">All Tasks</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="0" fail="1" skip="0" id="s1" name="Tasks">Tasks</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
