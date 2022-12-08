@@ -9,8 +9,9 @@ Library             RPA.Browser.Selenium    auto_close=${True}
 Library             RPA.HTTP
 Library             RPA.Excel.Files
 Library             RPA.Tables
-Library             RPA.Windows
 Library             RPA.PDF
+Library             RPA.FileSystem
+Library             RPA.Archive
 
 
 *** Tasks ***
@@ -30,7 +31,8 @@ Order robots from RobotSpareBin Industries Inc
         Embed the robot screenshot to the receipt PDF file    ${pdf}    ${screenshot}
         Order another robot
     END
-    #Create ZIP file of the receipts
+    Create ZIP file of the receipts
+    Cleanup temporary PDF directory
 
 
 *** Keywords ***
@@ -76,8 +78,8 @@ Store receipt as PDF
     [Arguments]    ${row}
     Wait Until Element Is Visible    receipt
     ${receipt_html}=    Get Element Attribute    receipt    outerHTML
-    Html To Pdf    ${receipt_html}    ${OUTPUT_DIR}${/}${row}.pdf
-    ${pdf}=    Convert to string    ${OUTPUT_DIR}${/}${row}.pdf
+    Html To Pdf    ${receipt_html}    ${OUTPUT_DIR}${/}temp${/}${row}.pdf
+    ${pdf}=    Convert to string    ${OUTPUT_DIR}${/}temp${/}${row}.pdf
     Log    ${pdf}
     RETURN    ${pdf}
 
@@ -86,8 +88,8 @@ Take screenshot of the robot
     Wait Until Element Is Visible    css:#robot-preview-image
     RPA.Browser.Selenium.Screenshot
     ...    css:#robot-preview-image
-    ...    ${OUTPUT_DIR}${/}${row}.png
-    ${screenshot}=    Convert To String    ${OUTPUT_DIR}${/}${row}.png
+    ...    ${OUTPUT_DIR}${/}temp${/}${row}.png
+    ${screenshot}=    Convert To String    ${OUTPUT_DIR}${/}temp${/}${row}.png
     Log    ${screenshot}
     RETURN    ${screenshot}
 
@@ -99,7 +101,13 @@ Embed the robot screenshot to the receipt PDF file
     Add Watermark Image To Pdf    ${screenshot}    ${pdf}
     Close Pdf    ${pdf}
 
-#Create ZIP file of the receipts
+Create ZIP file of the receipts
+    Create Directory    ${OUTPUT_DIR}${/}temp
+    ${zip_file_name}=    Set Variable    ${OUTPUT_DIR}/Receipts.zip
+    Archive Folder With Zip    ${OUTPUT_DIR}${/}temp    ${zip_file_name}
+
+Cleanup temporary PDF directory
+    Remove Directory    ${OUTPUT_DIR}${/}temp    True
 
 #Fill the form for one order
  #    Select From List By Value    head    2
