@@ -13,6 +13,7 @@ Library             RPA.PDF
 Library             RPA.FileSystem
 Library             RPA.Archive
 Library             RPA.Dialogs
+Library             RPA.Robocorp.Vault
 
 
 *** Tasks ***
@@ -32,6 +33,7 @@ Order robots from RobotSpareBin Industries Inc
         Embed the robot screenshot to the receipt PDF file    ${pdf}    ${screenshot}
         Order another robot
     END
+    Accidentally log top secret credentials from vault
 
 Receipts handling
     Create ZIP file of the receipts
@@ -118,6 +120,11 @@ Create ZIP file of the receipts
 Cleanup temporary PDF directory
     Remove Directory    ${OUTPUT_DIR}${/}temp    True
 
+Accidentally log top secret credentials from vault
+    ${secret}=    Get Secret    credentials
+    Log    data leak incoming
+    Log    ${secret}[username]
+    Log    ${secret}[password]
 #Fill the form for one order
  #    Select From List By Value    head    2
     #    Select Radio Button    body    3
