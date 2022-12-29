@@ -125,6 +125,7 @@ Accidentally log top secret credentials from vault
     Log    data leak incoming
     Log    ${secret}[username]
     Log    ${secret}[password]
+
 #Fill the form for one order
  #    Select From List By Value    head    2
     #    Select Radio Button    body    3
