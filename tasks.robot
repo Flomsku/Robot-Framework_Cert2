@@ -96,7 +96,8 @@ Store receipt as PDF
 
 Take screenshot of the robot
     [Arguments]    ${row}
-    Wait Until Element Is Visible    css:#robot-preview-image
+    #Wait Until Element Is Visible    css:#robot-preview-image -> this slices some of the picture
+    Wait Until Page Contains Element    css:#robot-preview-image
     RPA.Browser.Selenium.Screenshot
     ...    css:#robot-preview-image
     ...    ${OUTPUT_DIR}${/}temp${/}${row}.png
